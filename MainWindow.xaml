@@ -1,0 +1,63 @@
+﻿<Window x:Class="GOST_CARS_FRONT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GOST_CARS_FRONT"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1024" WindowStartupLocation="CenterScreen">
+        <DockPanel LastChildFill="True">
+            <StackPanel DockPanel.Dock="Top" Background="White" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button x:Name="logoutBtn" Content="Выйти из аккаунта" Width="150" Height="40" Margin="10,5" Click="logoutBtn_Click" Background="LightGray"/>
+                <Button x:Name="addClientBtn" Content="Добавить клиента" Width="150" Height="40" Margin="10,5" Click="addClientBtn_Click" Background="LightGreen"/>
+            </StackPanel>
+                <TabControl x:Name="tabControl">
+                    <TabItem Header="Автомобили">
+                        <Grid Margin="8">
+                            <ListView x:Name="CarsListView" MouseDoubleClick="CarsListView_MouseDoubleClick" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Марка" DisplayMemberBinding="{Binding Brand}" Width="150"/>
+                                        <GridViewColumn Header="Модель" DisplayMemberBinding="{Binding Model}" Width="150"/>
+                                        <GridViewColumn Header="Год выпуска" DisplayMemberBinding="{Binding ReleaseYear}" Width="100"/>
+                                        <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Price}" Width="100"/>
+
+                                        <GridViewColumn Header="Действия" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="Удалить" Click="DeleteClientButton_Click" Background="LightBlue"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </TabItem>  
+
+                <TabItem Header="Покупатели">
+                    <Grid Margin="8">
+                            <ListView x:Name="ClientsListView" MouseDoubleClick="ClientsListView_MouseDoubleClick" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="200"/>
+                                    <GridViewColumn Header="ФИО клиента" DisplayMemberBinding="{Binding FCs}" Width="200"/>
+                                    <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding PhoneNumber}" Width="150"/>
+                                    <GridViewColumn Header="Адрес" DisplayMemberBinding="{Binding Address}" Width="150"/>
+                                    <GridViewColumn Header="Дата покупки" DisplayMemberBinding="{Binding PurchaseDate}" Width="150"/>
+
+                                        <GridViewColumn Header="Действия" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="Удалить" Click="DeleteClientButton_Click" Background="LightBlue"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+                </TabControl>
+        </DockPanel>
+</Window>

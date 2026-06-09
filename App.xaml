@@ -1,0 +1,9 @@
+﻿<Application x:Class="GOST_CARS_FRONT.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GOST_CARS_FRONT"
+             StartupUri="AuthWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
