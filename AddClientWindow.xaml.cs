@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TestDealershipApi.Api;
+using System.Text.RegularExpressions;
+
 
 namespace GOST_CARS_FRONT
 {
@@ -28,14 +30,36 @@ namespace GOST_CARS_FRONT
 
         private async void CreateBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(FCsTB.Text) || string.IsNullOrEmpty(PhoneNumTB.Text))
+            bool hasError = false;
+
+            string phoneInput = PhoneNumTB.Text.Trim();
+            string phonePattern = @"^\+?\d{10,15}$";
+
+            if (string.IsNullOrEmpty(FCsTB.Text))
             {
-                MessageBox.Show("Пожалуйста, заполните все обязательные поля (ФИО, телефон)", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FCsTB.BorderBrush = Brushes.Red;
+                hasError = true;
+            }
+            if (string.IsNullOrEmpty(PhoneNumTB.Text))
+            {
+                PhoneNumTB.BorderBrush = Brushes.Red;
+                hasError = true;
+            }
+            else if (!Regex.IsMatch(phoneInput, phonePattern))
+            {
+                PhoneNumTB.BorderBrush = Brushes.Red;
+                MessageBox.Show("Пожалуйста, введите корректный номер телефона (10-15 цифр, может начинаться с '+').", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (hasError)
+            {
+                MessageBox.Show("ФИО и Телефон обязательны для заполнения!");
                 return;
             }
             if (!DateOnly.TryParse(PurchaseDateTB.Text, out DateOnly purchaseDate))
             {
-                MessageBox.Show("Пожалуйста, введите корректную дату покупки (формат: ГГГГ-ММ-ДД)", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                PurchaseDateTB.BorderBrush = Brushes.Red;
+                MessageBox.Show("Пожалуйста, введите корректные значения для полей", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -73,6 +97,14 @@ namespace GOST_CARS_FRONT
         {
             this.DialogResult = false;
             this.Close();
+        }
+        
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                textBox.ClearValue(Border.BorderBrushProperty);
+            }
         }
     }
 }

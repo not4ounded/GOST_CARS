@@ -25,7 +25,7 @@
                                         <GridViewColumn Header="Действия" Width="100">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Content="Удалить" Click="DeleteClientButton_Click" Background="LightBlue"/>
+                                                    <Button Content="Удалить" Click="DeleteCarButton_Click" Background="LightBlue"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>

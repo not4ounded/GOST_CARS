@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TestDealershipApi.Api;
 using TestDealershipApi.Models;
+using System.Text.RegularExpressions;
+using System.Globalization;
+
 
 namespace GOST_CARS_FRONT
 {
@@ -35,9 +38,41 @@ namespace GOST_CARS_FRONT
 
         private async void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(!int.TryParse(YearTB.Text, out int year) || !decimal.TryParse(PriceTB.Text, out decimal price))
+            bool hasError = false;
+
+            int parsedYear = 0;
+            decimal parsedPrice = 0;
+
+            string yearInput = YearTB.Text.Trim();
+            string yearPattern = @"^\d{4}$";
+
+            string priceInput = PriceTB.Text.Trim().Replace(',', '.');
+            string pricePattern = @"^\d+(\.\d{1,2})?$";
+
+            if (string.IsNullOrEmpty(yearInput))
             {
-                MessageBox.Show("Пожалуйста, введите корректные значения для полей.", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                YearTB.BorderBrush = Brushes.Red;
+                hasError = true;
+            } 
+            else if (!Regex.IsMatch(yearInput, yearPattern) || 
+                     !int.TryParse(yearInput, out parsedYear) ||
+                     parsedYear < 1900 || parsedYear > 2026)
+            {
+                YearTB.BorderBrush = Brushes.Red;
+                MessageBox.Show("Пожалуйста, введите корректный год выпуска (4 цифры от 1900 до 2026).", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (string.IsNullOrEmpty(priceInput))
+            {
+                PriceTB.BorderBrush = Brushes.Red;
+                hasError = true;
+            }
+            else if (!Regex.IsMatch(priceInput, pricePattern) ||
+                     !decimal.TryParse(priceInput, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out parsedPrice) ||
+                     parsedPrice <= 0)
+            {
+                PriceTB.BorderBrush = Brushes.Red;
+                MessageBox.Show("Пожалуйста, введите корректную цену (положительное число, допускается до 2 знаков после запятой).", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -45,9 +80,9 @@ namespace GOST_CARS_FRONT
                 _carToEdit.Id,
                 BrandTB.Text.Trim(),
                 ModelTB.Text.Trim(),
-                year,
+                parsedYear,
                 _carToEdit.Color ?? "Не указан",
-                price,
+                parsedPrice,
                 _carToEdit.Condition ?? "Б/У"
             );
 
@@ -67,6 +102,14 @@ namespace GOST_CARS_FRONT
         {
             this.DialogResult = false;
             this.Close();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                textBox.ClearValue(TextBox.BorderBrushProperty);
+            }
         }
     }
 }
